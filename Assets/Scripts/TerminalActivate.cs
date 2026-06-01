@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using TMPro;
 
 public class TerminalActivate : MonoBehaviour
@@ -8,33 +7,36 @@ public class TerminalActivate : MonoBehaviour
     bool playerNear = false;
 
     public TMP_Text popupText;
-    public GameObject pressInteractText;
-
     public GameObject targetLaser;
 
     void Start()
     {
-        pressInteractText.SetActive(false);
+        if (MobileUI.instance != null)
+        {
+            MobileUI.instance.HideInteractButton();
+        }
     }
 
-    void Update()
+    public void Interact()
     {
-        if (playerNear && !activated)
+        if (!playerNear || activated)
+            return;
+
+        activated = true;
+
+        popupText.text = "TERMINAL ACTIVATED";
+
+        if (targetLaser != null)
         {
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                activated = true;
-
-                popupText.text = "TERMINAL ACTIVATED";
-
-                // matiin laser
-                targetLaser.SetActive(false);
-
-                pressInteractText.SetActive(false);
-
-                Invoke("HidePopup", 2f);
-            }
+            targetLaser.SetActive(false);
         }
+
+        if (MobileUI.instance != null)
+        {
+            MobileUI.instance.HideInteractButton();
+        }
+
+        Invoke(nameof(HidePopup), 2f);
     }
 
     void OnTriggerEnter(Collider other)
@@ -45,7 +47,10 @@ public class TerminalActivate : MonoBehaviour
 
             if (!activated)
             {
-                pressInteractText.SetActive(true);
+                if (MobileUI.instance != null)
+                {
+                    MobileUI.instance.ShowInteractButton();
+                }
             }
         }
     }
@@ -56,7 +61,10 @@ public class TerminalActivate : MonoBehaviour
         {
             playerNear = false;
 
-            pressInteractText.SetActive(false);
+            if (MobileUI.instance != null)
+            {
+                MobileUI.instance.HideInteractButton();
+            }
         }
     }
 

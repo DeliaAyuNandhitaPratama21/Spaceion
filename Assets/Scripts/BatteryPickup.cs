@@ -1,42 +1,38 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BatteryPickup : MonoBehaviour
 {
-    public GameObject pressInteractText;
-
     bool pickedUp = false;
-
     bool playerNear = false;
 
     void Start()
     {
-        pressInteractText.SetActive(false);
+        if (MobileUI.instance != null)
+        {
+            MobileUI.instance.HideInteractButton();
+        }
     }
 
-    void Update()
+    public void Interact()
     {
-        if (playerNear && !pickedUp)
+        if (!playerNear || pickedUp)
+            return;
+
+        if (GameManager.instance.batteryCount >= 3)
+            return;
+
+        pickedUp = true;
+
+        GameManager.instance.AddBattery();
+
+        if (MobileUI.instance != null)
         {
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                // maksimal 3 battery
-                if (GameManager.instance.batteryCount >= 3)
-                {
-                    return;
-                }
-
-                pickedUp = true;
-
-                GameManager.instance.AddBattery();
-
-                pressInteractText.SetActive(false);
-
-                gameObject.SetActive(false);
-
-                Debug.Log("Battery Picked!");
-            }
+            MobileUI.instance.HideInteractButton();
         }
+
+        gameObject.SetActive(false);
+
+        Debug.Log("Battery Picked!");
     }
 
     void OnTriggerEnter(Collider other)
@@ -45,7 +41,10 @@ public class BatteryPickup : MonoBehaviour
         {
             playerNear = true;
 
-            pressInteractText.SetActive(true);
+            if (MobileUI.instance != null)
+            {
+                MobileUI.instance.ShowInteractButton();
+            }
         }
     }
 
@@ -55,7 +54,10 @@ public class BatteryPickup : MonoBehaviour
         {
             playerNear = false;
 
-            pressInteractText.SetActive(false);
+            if (MobileUI.instance != null)
+            {
+                MobileUI.instance.HideInteractButton();
+            }
         }
     }
 }

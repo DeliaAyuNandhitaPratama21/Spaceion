@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
 
     public void AddBattery()
     {
-        // maksimal 3
         if (batteryCount >= 3)
         {
             return;

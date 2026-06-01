@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GeneratorSystem : MonoBehaviour
 {
@@ -9,17 +8,12 @@ public class GeneratorSystem : MonoBehaviour
     public GameObject generatorBattery2;
     public GameObject generatorBattery3;
 
-    public GameObject pressInteractText;
-
-    // drag cube merah / GeneratorTrigger ke sini
     public Renderer indicatorRenderer;
 
     int batteryInserted = 0;
 
     bool activated = false;
-
     bool playerNear = false;
-
     bool canInsert = true;
 
     void Start()
@@ -28,30 +22,24 @@ public class GeneratorSystem : MonoBehaviour
         generatorBattery2.SetActive(false);
         generatorBattery3.SetActive(false);
 
-        pressInteractText.SetActive(false);
-
-        // warna awal merah
         if (indicatorRenderer != null)
         {
             indicatorRenderer.material.color = Color.red;
         }
     }
 
-    void Update()
+    public void Interact()
     {
-        if (playerNear && !activated)
+        if (!playerNear || activated || !canInsert)
+            return;
+
+        if (GameManager.instance.batteryCount > 0)
         {
-            if (Keyboard.current.eKey.wasPressedThisFrame && canInsert)
-            {
-                if (GameManager.instance.batteryCount > 0)
-                {
-                    canInsert = false;
+            canInsert = false;
 
-                    InsertBattery();
+            InsertBattery();
 
-                    Invoke(nameof(ResetInsert), 0.2f);
-                }
-            }
+            Invoke(nameof(ResetInsert), 0.2f);
         }
     }
 
@@ -68,7 +56,10 @@ public class GeneratorSystem : MonoBehaviour
 
             if (!activated)
             {
-                pressInteractText.SetActive(true);
+                if (MobileUI.instance != null)
+                {
+                    MobileUI.instance.ShowInteractButton();
+                }
             }
         }
     }
@@ -79,16 +70,17 @@ public class GeneratorSystem : MonoBehaviour
         {
             playerNear = false;
 
-            pressInteractText.SetActive(false);
+            if (MobileUI.instance != null)
+            {
+                MobileUI.instance.HideInteractButton();
+            }
         }
     }
 
     void InsertBattery()
     {
         if (batteryInserted >= 3)
-        {
             return;
-        }
 
         batteryInserted++;
 
@@ -96,22 +88,15 @@ public class GeneratorSystem : MonoBehaviour
 
         GameManager.instance.UpdateBatteryUI();
 
-        Debug.Log("Battery Inserted!");
-
         if (batteryInserted == 1)
-        {
             generatorBattery1.SetActive(true);
-        }
 
         if (batteryInserted == 2)
-        {
             generatorBattery2.SetActive(true);
-        }
 
         if (batteryInserted == 3)
         {
             generatorBattery3.SetActive(true);
-
             ActivateGenerator();
         }
     }
@@ -120,15 +105,15 @@ public class GeneratorSystem : MonoBehaviour
     {
         activated = true;
 
-        Debug.Log("Generator Active!");
-
-        // jadi hijau
         if (indicatorRenderer != null)
         {
             indicatorRenderer.material.color = Color.green;
         }
 
-        pressInteractText.SetActive(false);
+        if (MobileUI.instance != null)
+        {
+            MobileUI.instance.HideInteractButton();
+        }
 
         if (doorAnim != null)
         {

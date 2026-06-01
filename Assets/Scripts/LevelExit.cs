@@ -7,7 +7,6 @@ public class LevelExit : MonoBehaviour
 
     void Start()
     {
-        // kalau UI belum diisi, biar gak error
         if (nextLevelUI != null)
         {
             nextLevelUI.SetActive(false);
@@ -23,10 +22,8 @@ public class LevelExit : MonoBehaviour
                 nextLevelUI.SetActive(true);
             }
 
-            // pause game
             Time.timeScale = 0f;
 
-            // munculkan cursor
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -41,10 +38,8 @@ public class LevelExit : MonoBehaviour
                 nextLevelUI.SetActive(false);
             }
 
-            // lanjut game
             Time.timeScale = 1f;
 
-            // lock cursor lagi
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -52,12 +47,10 @@ public class LevelExit : MonoBehaviour
 
     public void GoToNextLevel()
     {
-        // normalin time
         Time.timeScale = 1f;
 
-        // lock cursor lagi
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         SceneManager.LoadScene("Level2 FPC");
     }

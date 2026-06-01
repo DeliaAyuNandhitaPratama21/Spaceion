@@ -5,9 +5,10 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        // hide cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Debug.Log("PLAY CLICKED");
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         SceneManager.LoadScene("Level1 FPC");
     }
