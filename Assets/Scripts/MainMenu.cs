@@ -12,4 +12,11 @@ public class MainMenu : MonoBehaviour
 
         SceneManager.LoadScene("Level1 FPC");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+
+        Debug.Log("EXIT CLICKED");
+    }
 }

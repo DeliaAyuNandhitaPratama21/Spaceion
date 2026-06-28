@@ -6,11 +6,14 @@ public class TerminalActivate : MonoBehaviour
     bool activated = false;
     bool playerNear = false;
 
-    public TMP_Text popupText;
+    public GameObject TerminalActivatedText;
+    public TMP_Text PopupText;
     public GameObject targetLaser;
 
     void Start()
     {
+        TerminalActivatedText.SetActive(false);
+
         if (MobileUI.instance != null)
         {
             MobileUI.instance.HideInteractButton();
@@ -24,7 +27,8 @@ public class TerminalActivate : MonoBehaviour
 
         activated = true;
 
-        popupText.text = "TERMINAL ACTIVATED";
+        TerminalActivatedText.SetActive(true);
+        PopupText.text = "TERMINAL ACTIVATED";
 
         if (targetLaser != null)
         {
@@ -45,12 +49,9 @@ public class TerminalActivate : MonoBehaviour
         {
             playerNear = true;
 
-            if (!activated)
+            if (!activated && MobileUI.instance != null)
             {
-                if (MobileUI.instance != null)
-                {
-                    MobileUI.instance.ShowInteractButton();
-                }
+                MobileUI.instance.ShowInteractButton();
             }
         }
     }
@@ -70,6 +71,6 @@ public class TerminalActivate : MonoBehaviour
 
     void HidePopup()
     {
-        popupText.text = "";
+        TerminalActivatedText.SetActive(false);
     }
 }
