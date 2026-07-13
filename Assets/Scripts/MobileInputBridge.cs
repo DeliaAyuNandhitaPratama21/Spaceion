@@ -7,20 +7,19 @@ public class MobileInputBridge : MonoBehaviour
 
     private StarterAssetsInputs input;
 
-    void Start()
+    void Awake()
     {
         input = FindFirstObjectByType<StarterAssetsInputs>();
     }
 
     void Update()
     {
-        if (input != null)
-        {
-            input.move = new Vector2(
-                joystick.Horizontal,
-                joystick.Vertical
-            );
-        }
+        if (input == null || joystick == null)
+            return;
+
+        input.move = new Vector2(
+            -joystick.Horizontal,
+            -joystick.Vertical
+        );
     }
-    
 }
