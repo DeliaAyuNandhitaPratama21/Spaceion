@@ -67,7 +67,7 @@ public class TutorialManager : MonoBehaviour
     IEnumerator ShowObjective()
     {
         tutorialText.text =
-            "Find and collect 3 batteries.";
+            "Mission:\nFind 3 batteries, install them in the generator, and escape through the exit door.";
 
         yield return new WaitForSeconds(2f);
 

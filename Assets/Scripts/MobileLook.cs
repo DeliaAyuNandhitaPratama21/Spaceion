@@ -27,7 +27,10 @@ public class MobileLook : MonoBehaviour,
     {
         if (input == null) return;
 
-        input.look = eventData.delta * sensitivity;
+        input.look = new Vector2(
+            eventData.delta.x,
+            -eventData.delta.y
+        ) * sensitivity;
     }
 
     public void OnPointerUp(PointerEventData eventData)
